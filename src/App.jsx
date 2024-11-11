@@ -1,9 +1,8 @@
-// src/App.jsx
 import React, { useEffect, useState } from 'react';
 import ThreeParticleSphere from './ParticleSphere';
-import './App.css'; // Import your CSS file for styling
-import MessageManager from './components/MessageManager'; // Import the message manager
-import useSocket from './hooks/useSocket'; // Import your WebSocket hook
+import './App.css'; 
+import MessageManager from './components/MessageManager';
+import useSocket from './hooks/useSocket'; 
 
 const App = () => {
   const { socket,sendMessage } = useSocket('ws://localhost:8080/');
@@ -48,18 +47,27 @@ const App = () => {
       
       {/* Input Box positioned above the sphere */}
       <div style={styles.inputContainer}>
-        <button onClick={handleSendMessage}>Send Message</button>
+        {/* <button onClick={handleSendMessage}>Send Message</button> */}
         <input 
           type="text" 
-          placeholder="Chat" 
+          value={latestMessage}
+          placeholder="press Enter after Typing" 
           style={styles.inputField} 
           onChange={(e) => {
             setlatestMessage(e.target.value)
+
           }}
+          onKeyDown = {(event) => {
+            if(event.key  === 'Enter'){
+              handleSendMessage();
+              setlatestMessage("")
+            }
+          }}
+          
         />
       </div>
 
-      <MessageManager
+      {/* <MessageManager
         onNewUser={(message) => {
           const parsedMessage = JSON.parse(message);
           if (parsedMessage.type === 'position') {
@@ -78,7 +86,7 @@ const App = () => {
             });
           }
         }}
-      />
+      /> */}
     </div>
   );
 };
