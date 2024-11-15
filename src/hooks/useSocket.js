@@ -20,12 +20,12 @@ const useSocket = (url) => {
       
       if(user==""){
         user  = message.data;
-        logMessage('hey there '+ user,randomColor());
+        logMessage(null,'Hey there '+ user,randomColor());
       }
       else{
         const data  = message.data
         const newMessage  = JSON.parse(data)
-        logMessage(newMessage.user+":  "+newMessage.message , randomColor())
+        logMessage(newMessage.user,newMessage.message , randomColor())
       }
     };
 
@@ -35,6 +35,7 @@ const useSocket = (url) => {
 
     newSocket.onclose = () => {
       console.log('WebSocket connection closed');
+      
     };
     
 
@@ -42,6 +43,7 @@ const useSocket = (url) => {
 
     return () => {
       newSocket.close();
+      setSocket(newSocket);
     };
   }, [url]);
 
