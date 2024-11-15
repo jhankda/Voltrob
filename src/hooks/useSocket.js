@@ -1,9 +1,14 @@
 // src/hooks/useSocket.js
 import { useEffect, useState } from 'react';
+import {logMessage} from '../MessageDisplay.jsx';
 
+const randomColor = () =>{
+  return  `hsl(${Math.random() * 360}, 70%, 70%)`;
+}
+let user = "";
 const useSocket = (url) => {
   const [socket, setSocket] = useState(null);
-
+  
   useEffect(() => {
     const newSocket = new WebSocket(url);
 
@@ -12,8 +17,16 @@ const useSocket = (url) => {
     };
 
     newSocket.onmessage = (message) => {
-      console.log('Message received:', message.data);
-      // Use callback or state here to handle messages if needed
+      
+      if(user==""){
+        user  = message.data;
+        logMessage('hey there '+ user,randomColor());
+      }
+      else{
+        const data  = message.data
+        const newMessage  = JSON.parse(data)
+        logMessage(newMessage.user+":  "+newMessage.message , randomColor())
+      }
     };
 
     newSocket.onerror = (error) => {
@@ -23,6 +36,7 @@ const useSocket = (url) => {
     newSocket.onclose = () => {
       console.log('WebSocket connection closed');
     };
+    
 
     setSocket(newSocket);
 
@@ -31,9 +45,12 @@ const useSocket = (url) => {
     };
   }, [url]);
 
+
   const sendMessage = (message) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(message);
+      const data = {user, message}
+      socket.send(JSON.stringify(data));
+      console.log(`: ${user}`);
     } else {
       console.log('WebSocket is not connected');
     }

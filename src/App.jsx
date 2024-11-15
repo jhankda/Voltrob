@@ -3,6 +3,7 @@ import ThreeParticleSphere from './ParticleSphere';
 import './App.css'; 
 import MessageManager from './components/MessageManager';
 import useSocket from './hooks/useSocket'; 
+import MessageDisplay from './MessageDisplay';
 
 const App = () => {
   const { socket,sendMessage } = useSocket('ws://localhost:8080/');
@@ -26,6 +27,12 @@ const App = () => {
     sendMessage(positionMessage);
   };
 
+  // const [messages, setMessages] = useState([
+  //   { text: "Welcome to the log", type: "info" },
+  //   { text: "This is a warning message", type: "warning" },
+  //   { text: "Error occurred", type: "error" },
+  // ]);
+
   // Add a mousemove listener to detect position changes
   // useEffect(() => {
   //   const handleMouseMove = (event) => {
@@ -44,6 +51,7 @@ const App = () => {
     <div style={styles.container}>
       <ThreeParticleSphere 
       />
+      <MessageDisplay />
       
       {/* Input Box positioned above the sphere */}
       <div style={styles.inputContainer}>
@@ -66,6 +74,10 @@ const App = () => {
           
         />
       </div>
+      {/* <div>
+      <h1>Application Log</h1>
+      <logMessages messages={messages} />
+    </div> */}
 
       {/* <MessageManager
         onNewUser={(message) => {
